@@ -86,26 +86,34 @@ def get_pie_chart(entered_site):
 # Add a callback function for `site-dropdown` and `payload-slider` as inputs, `success-payload-scatter-chart` as output
 @app.callback(Output(component_id='success-payload-scatter-chart', component_property='figure'),
               [
-                Input(component_id="payload-slider", component_property="value"),
-                Input(component_id="site-dropdown", component_property="value"),
-            ])
-def get_scatter_plot(payload,entered_site):
-    range_df = spacex_df[(spacex_df["Payload Mass (kg)"] > payload[0]) & 
-                              (spacex_df["Payload Mass (kg)"] < payload[1])]
+    Input(component_id="payload-slider", component_property="value"),
+    Input(component_id="site-dropdown", component_property="value"),
+])
+def get_scatter_plot(payload, entered_site):
+    range_df = spacex_df[(spacex_df["Payload Mass (kg)"] > payload[0]) &
+                         (spacex_df["Payload Mass (kg)"] < payload[1])]
     site_df = range_df[range_df["Launch Site"]
-                            == entered_site]
+                       == entered_site]
     if entered_site == 'ALL':
         fig = px.scatter(
             x=range_df['Payload Mass (kg)'],
             y=range_df['class'],
-            color = range_df['Booster Version Category']
+            color=range_df['Booster Version Category']
+        )
+        fig.update_layout(
+            xaxis_title='Payload Mass (kg)',
+            yaxis_title='Class'
         )
         return fig
     else:
         fig = px.scatter(
-            x= site_df['Payload Mass (kg)'],
-            y= site_df['class'],
-            color = site_df['Booster Version Category']
+            x=site_df['Payload Mass (kg)'],
+            y=site_df['class'],
+            color=site_df['Booster Version Category']
+        )
+        fig.update_layout(
+            xaxis_title='Payload Mass (kg)',
+            yaxis_title='Class'
         )
         return fig
 
